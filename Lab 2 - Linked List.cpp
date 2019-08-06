@@ -224,7 +224,7 @@ int main()
 		}
 
 // To preview Linked List Live
-
+/*
 		tmp=Main;
 		cout<<"                   Linked List : ";
 		while(tmp!=NULL)
@@ -232,7 +232,7 @@ int main()
 			cout<<"("<<tmp->x<<","<<tmp->y<<")";
 			tmp=tmp->ptr;
 		}
-		cout<<endl;
+		cout<<endl; */
 	}
 	return 0;
 }
