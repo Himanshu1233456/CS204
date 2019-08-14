@@ -41,7 +41,7 @@ struct node* DelFirst()
 
 	if(tmp==NULL)
 	{
-		cout<<"Linked List Empty!"<<endl;
+		cout<<"-1"<<endl;
 	}
 
 	else
@@ -63,7 +63,7 @@ struct node* Del(long long int x,long long int y)
 
 	if(tmp==NULL)
 	{
-		cout<<"Linked List Empty!"<<endl;
+		cout<<"-1"<<endl;
 		return Head;
 	}
 
@@ -92,7 +92,7 @@ struct node* Del(long long int x,long long int y)
 		}
 	tmp2=tmp2->ptr;
 	}
-	cout<<"No Node Found!"<<endl;
+	cout<<"-1"<<endl;
 	return Head;
 }
 
@@ -106,7 +106,7 @@ void Search(long double d)
 
 	if(tmp==NULL)
 	{
-		cout<<"Linked List empty!"<<endl;
+		cout<<"-1"<<endl;
 		return;
 	}
 
@@ -114,16 +114,20 @@ void Search(long double d)
 	{
 		if((((tmp->x)*(tmp->x))+((tmp->y)*(tmp->y)))<=c1)
 		{
-			cout<<"("<<tmp->x<<","<<tmp->y<<")";
+			/* cout<<"("<<tmp->x<<","<<tmp->y<<")"; */
 			cnt+=1;
 		}
 	tmp=tmp->ptr;
 	}
-	cout<<endl;
 
 	if(cnt==0)
 	{
-		cout<<"No Node Found!"<<endl;
+		cout<<"-1"<<endl;
+	}
+	
+	else
+	{
+		cout<<cnt<<endl;	
 	}
 }
 
