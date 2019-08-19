@@ -1,6 +1,5 @@
 #include <iostream>
 #include <stack>
-#include<bits/stdc++.h>
 
 using namespace std;
 
@@ -27,7 +26,7 @@ int prior(string p)
 	} 
 }
 
-void in_post_conv(string expe[50])
+void in_post_conv(string expe[])
 {
 	int i,j;
 	string out[50];
@@ -65,7 +64,7 @@ void in_post_conv(string expe[50])
 
 		else
 		{ 
-            		while(s.top() != "N" && (prior(expe[i]) <= prior(s.top())) 
+            		while(s.top() != "N" && prior(expe[i]) <= prior(s.top())) 
             		{ 
                 		string c = s.top(); 
                 		s.pop(); 
@@ -149,7 +148,7 @@ int main()
 		cout<<expe[i]<<endl;
 	}
 
-	in_post_conv(expe[50]);
+	in_post_conv(expe);
 
 
 
