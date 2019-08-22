@@ -1,5 +1,6 @@
 #include <iostream>
 #include <stack>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -26,18 +27,15 @@ int prior(string p)
 	}
 }
 
-void in_post_conv(string expe[],int cnt)
+void in_post_conv(string expe[],int cnt,string out[])
 {
+
 	int i,j,o=0;
-	string tmp="m";
-	string out[50];
 	std::stack<string> s;
 	s.push("N");
 
 	for(i=0;i<cnt;i++,o++)
 	{
-		tmp=expe[i];
-
 		if(expe[i]!="+" && expe[i]!="-" && expe[i]!="/" && expe[i]!="*" && expe[i]!="^" && expe[i]!="(" && expe[i]!=")")
 		{
 			out[o]=expe[i];
@@ -71,6 +69,7 @@ void in_post_conv(string expe[],int cnt)
 		{
     	while(s.top() != "N" && prior(expe[i]) <= prior(s.top()))
       {
+				if(expe[i]=="^" && s.top()=="^") break;
               string c = s.top();
               s.pop();
       				out[o] += c;
@@ -89,10 +88,115 @@ void in_post_conv(string expe[],int cnt)
 				o++;
     }
 
-	for(j=0;j<50;j++)
+}
+
+struct tree
+{
+	string a;
+	tree *l, *r;
+};
+
+bool op(string c)
+{
+	if (c == "+" || c == "-" || c == "*" || c == "/" || c == "^")
 	{
-		cout<<out[j]<<" ";
+		return true;
 	}
+	return false;
+}
+
+void trav(tree *i)
+{
+	if(i)
+	{
+		trav(i->l);
+		cout<<i->a;
+		trav(i->r);
+	}
+}
+
+tree* node(string s)
+{
+	tree *tmp = new tree;
+	tmp->l = tmp->r = NULL;
+	tmp->a = s;
+	return tmp;
+}
+
+tree* construct(string post[],int cnt)
+{
+    stack<tree *> tmp;
+    tree *t, *t1, *t2;
+
+    for (int i=0; i<cnt; i++)
+    {
+        if (!op(post[i]))
+        {
+            t = node(post[i]);
+            tmp.push(t);
+        }
+
+        else
+        {
+            t = node(post[i]);
+            t1 = tmp.top();
+            tmp.pop();
+            t2 = tmp.top();
+            tmp.pop();
+            t->r = t1;
+            t->l = t2;
+            tmp.push(t);
+        }
+    }
+
+    t = tmp.top();
+    tmp.pop();
+
+    return t;
+}
+
+int convert(string s)
+{
+    int num = 0;
+
+    if(s[0]!='-')
+        for (int i=0; i<s.length(); i++)
+            num = num*10 + (int(s[i])-48);
+
+    else
+        for (int i=1; i<s.length(); i++)
+        {
+            num = num*10 + (int(s[i])-48);
+            num = num*-1;
+        }
+
+    return num;
+}
+
+int answ(tree* m)
+{
+    if (!m)
+        return 0;
+
+    else if (!m->l && !m->r)
+        return convert(m->a);
+
+    int a = answ(m->l);
+    int b = answ(m->r);
+
+    if (m->a=="+")
+        return a+b;
+
+    else if (m->a=="-")
+        return a-b;
+
+    else if (m->a=="*")
+        return a*b;
+
+		else if (m->a=="^")
+		    return pow(a,b);
+
+    return a/b;
 }
 
 int main()
@@ -100,7 +204,8 @@ int main()
 	int i,j,cnt=0,k,cnt1=0;
 	char c,tmp='n';
 	string exp;
-	string expe[50];
+	string expe[50],post[50];
+	tree * ext;
 
 	cin>>exp;
 
@@ -163,7 +268,21 @@ int main()
 
 cout<<"---------"<<endl;
 
- in_post_conv(expe,cnt1);
+in_post_conv(expe,cnt1,post);
+
+for(k=0;k<cnt1;k++)
+{
+	cout<<post[k]<<" ";
+}
+
+cout<<endl<<"---------"<<endl;
+
+trav(ext = construct(post,cnt1));
+
+cout<<endl<<"---------"<<endl;
+
+cout<<answ(ext);
+
 
 	return 0;
 }
