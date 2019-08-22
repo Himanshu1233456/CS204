@@ -3,10 +3,10 @@
 
 using namespace std;
 
-int prior(string p) 
-{ 
+int prior(string p)
+{
 	if(p == "^")
-	{ 
+	{
 		return 3;
 	}
 
@@ -16,73 +16,78 @@ int prior(string p)
 	}
 
 	else if(p=="+" || p=="-")
-	{ 
+	{
 		return 1;
 	}
 
 	else
 	{
 		return -1;
-	} 
+	}
 }
 
-void in_post_conv(string expe[])
+void in_post_conv(string expe[],int cnt)
 {
-	int i,j;
+	int i,j,o=0;
+	string tmp="m";
 	string out[50];
 	std::stack<string> s;
 	s.push("N");
-	
-	for(i=0;i<50;i++)
+
+	for(i=0;i<cnt;i++,o++)
 	{
-		if(expe[i]!="+" && expe[i]!="-" && expe[i]!="/" && expe[i]!="*" && expe[i]!="^")
+		tmp=expe[i];
+
+		if(expe[i]!="+" && expe[i]!="-" && expe[i]!="/" && expe[i]!="*" && expe[i]!="^" && expe[i]!="(" && expe[i]!=")")
 		{
-			out[i]=expe[i];
+			out[o]=expe[i];
 		}
-		
+
 		else if(expe[i]=="(")
 		{
 			s.push("(");
+			o--;
 		}
 
-		else if(expe[i] == ")") 
-        	{ 
-            		while(s.top() != "N" && s.top() != "(") 
-            		{ 
-                		string c = s.top(); 
-                		s.pop(); 
-               			out[i] += c;
-				i++;
+		else if(expe[i] == ")")
+        	{
+            		while(s.top() != "N" && s.top() != "(")
+            		{
+                		string c = s.top();
+                		s.pop();
+               			out[o] += c;
+										o++;
             		}
 
-            		if(s.top()=="(") 
-            		{ 
-                		string c = s.top(); 
+            		if(s.top()=="(")
+            		{
+                		string c = s.top();
                 		s.pop();
-            		} 
+            		}
+								o--;
         	}
 
 		else
-		{ 
-            		while(s.top() != "N" && prior(expe[i]) <= prior(s.top())) 
-            		{ 
-                		string c = s.top(); 
-                		s.pop(); 
-                		out[i] += c;
-				i++;
-            		}
- 
-            		s.push(expe[i]); 
-        	} 
+		{
+    	while(s.top() != "N" && prior(expe[i]) <= prior(s.top()))
+      {
+              string c = s.top();
+              s.pop();
+      				out[o] += c;
+							o++;
+      }
+      s.push(expe[i]);
+			o--;
+    }
+	}
 
-		while(s.top() != "N") 
-    		{ 
-        		string c = s.top(); 
-        		s.pop(); 
-        		out[i] += c;
-			i++; 
-    		} 
-	}	
+	while(s.top() != "N")
+    {
+        string c = s.top();
+        s.pop();
+        out[o] += c;
+				o++;
+    }
 
 	for(j=0;j<50;j++)
 	{
@@ -92,7 +97,7 @@ void in_post_conv(string expe[])
 
 int main()
 {
-	int i,j,cnt=0;
+	int i,j,cnt=0,k,cnt1=0;
 	char c,tmp='n';
 	string exp;
 	string expe[50];
@@ -106,7 +111,7 @@ int main()
 		for(j=cnt;j<exp.length();j++)
 		{
 			if(exp[j]=='+' || exp[j]=='-' || exp[j]=='/' || exp[j]=='*' || exp[j]=='(' || exp[j]==')' || exp[j]=='^')
-			{	
+			{
 				if(tmp=='n')
 				{
 					expe[i]+=exp[j];
@@ -131,11 +136,11 @@ int main()
 					tmp=exp[j];
 					break;
 				}
-				
+
 			}
-		
+
 			else
-			{			
+			{
 				expe[i]+=exp[j];
 				cnt+=1;
 				tmp=exp[j];
@@ -143,14 +148,22 @@ int main()
 		}
 	}
 
-	for(i=0;i<50;i++)
+	for(k=0;k<50;k++)
 	{
-		cout<<expe[i]<<endl;
+		if(!expe[k].empty())
+		{
+			cnt1+=1;
+		}
 	}
 
-	in_post_conv(expe);
+	for(k=0;k<cnt1;k++)
+	{
+		cout<<expe[k]<<endl;
+	}
 
+cout<<"---------"<<endl;
 
+ in_post_conv(expe,cnt1);
 
 	return 0;
 }
