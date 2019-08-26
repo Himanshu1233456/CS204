@@ -102,7 +102,11 @@ bool op(string c)
 	{
 		return true;
 	}
-	return false;
+
+	else
+	{
+		return false;
+	}
 }
 
 void trav(tree *i)
@@ -110,7 +114,6 @@ void trav(tree *i)
 	if(i)
 	{
 		trav(i->l);
-		cout<<i->a;
 		trav(i->r);
 	}
 }
@@ -199,90 +202,163 @@ int answ(tree* m)
     return a/b;
 }
 
+struct charvalue
+{
+	int v;
+	string c;
+};
+
+bool assign(string expe[],int cnt)
+{
+	for(int i=0;i<cnt;i++)
+	{
+		if(expe[i]=="=")
+		{
+			return true;
+		}
+
+		else
+		{
+			continue;
+		}
+	}
+	return false;
+}
+
 int main()
 {
-	int i,j,cnt=0,k,cnt1=0;
-	char c,tmp='n';
+	int i,j,cnt=0,k,cnt1=0,cnt2=0,l,tc;
+	char c,tmp='n',chk;
+	int a=0;
 	string exp;
 	string expe[50],post[50];
 	tree * ext;
 
-	cin>>exp;
+cin>>tc;
+cin>>l;
 
-	cout<<"String : "<<exp<<endl;
-
-	for(i=0;i<50;i++)
+for(int z=0;z<tc;z++)
+{
+	for(int x=0;x<l;x++)
 	{
-		for(j=cnt;j<exp.length();j++)
-		{
-			if(exp[j]=='+' || exp[j]=='-' || exp[j]=='/' || exp[j]=='*' || exp[j]=='(' || exp[j]==')' || exp[j]=='^')
-			{
-				if(tmp=='n')
-				{
-					expe[i]+=exp[j];
-					cnt+=1;
-					tmp=exp[j];
-					break;
-				}
+		cin>>exp;
 
-				else if(tmp=='+' || tmp=='-' || tmp=='/' || tmp=='*' || tmp=='(' || tmp==')' || tmp=='^')
+		for(i=0;i<50;i++)
+		{
+			for(j=cnt;j<exp.length();j++)
+			{
+				if(exp[j]=='+' || exp[j]=='-' || exp[j]=='/' || exp[j]=='*' || exp[j]=='(' || exp[j]==')' || exp[j]=='^' || exp[j]=='=')
 				{
-					expe[i]+=exp[j];
-					cnt+=1;
-					tmp=exp[j];
-					break;
+					if(exp[j]=='-' && tmp=='(')
+					{
+						while(exp[j]!=')')
+						{
+							expe[i]+=exp[j];
+							tmp=exp[j];
+							j++;
+							cnt+=1;
+						}
+						a=1;
+						break;
+					}
+
+					else if(tmp=='n')
+					{
+						expe[i]+=exp[j];
+						cnt+=1;
+						tmp=exp[j];
+						break;
+					}
+
+					else if(tmp=='+' || tmp=='-' || tmp=='/' || tmp=='*' || tmp=='(' || tmp==')' || tmp=='^' || tmp=='=')
+					{
+						expe[i]+=exp[j];
+						cnt+=1;
+						tmp=exp[j];
+						break;
+					}
+
+					else
+					{
+						if(a==1)
+						{
+						expe[i]+=exp[j];
+						cnt+=1;
+						tmp=exp[j];
+						a-=1;
+						break;
+						}
+
+						else
+						{
+							i+=1;
+							expe[i]+=exp[j];
+							cnt+=1;
+							tmp=exp[j];
+							break;
+						}
+					}
 				}
 
 				else
 				{
-					i+=1;
 					expe[i]+=exp[j];
 					cnt+=1;
 					tmp=exp[j];
-					break;
+				}
+			}
+		}
+
+		for(k=0;k<50;k++)
+		{
+			if(!expe[k].empty())
+			{
+				cnt1+=1;
+			}
+		}
+
+		for(k=0;k<50;k++)
+		{
+			if(!expe[k].empty())
+			{
+				if(expe[k]=="(" || expe[k]==")")
+				{
+					cnt2+=0;
 				}
 
-			}
-
-			else
-			{
-				expe[i]+=exp[j];
-				cnt+=1;
-				tmp=exp[j];
+				else
+				{
+					cnt2+=1;
+				}
 			}
 		}
-	}
 
-	for(k=0;k<50;k++)
-	{
-		if(!expe[k].empty())
+		in_post_conv(expe,cnt1,post);
+		trav(ext = construct(post,cnt2));
+		cout<<answ(ext)<<endl;
+		cnt=0;
+		cnt1=0;
+		cnt2=0;
+		exp.clear();
+		for(int h=0;h<50;h++)
 		{
-			cnt1+=1;
+			expe[h].clear();
+			post[h].clear();
 		}
+		free(ext);
 	}
-
-	for(k=0;k<cnt1;k++)
-	{
-		cout<<expe[k]<<endl;
-	}
-
-cout<<"---------"<<endl;
-
-in_post_conv(expe,cnt1,post);
-
-for(k=0;k<cnt1;k++)
-{
-	cout<<post[k]<<" ";
 }
 
-cout<<endl<<"---------"<<endl;
-
-trav(ext = construct(post,cnt1));
-
-cout<<endl<<"---------"<<endl;
-
-cout<<answ(ext);
-
+if(assign(expe,cnt1))
+{
+	for(int k=0;k<cnt1;k++)
+	{
+		if(expe[k]=="=")
+		{
+			int idx=k;
+		}
+	}
+}
 
 	return 0;
 }
