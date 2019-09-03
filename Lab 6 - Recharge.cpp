@@ -25,24 +25,28 @@ void insert(vector <pair<long long int, long long int>> &vect, long long int id,
     tmp.second=val;
 
     vect.push_back(tmp);
+    return;
   }
 
   else
   {
+    sort(vect.begin(), vect.end(), [](auto &left, auto &right)
+    {
+      return left.second < right.second;
+    });
     if(binary_search(vect.begin(),vect.end(),id, compare()))
     {
       vect[lower_bound(vect.begin(),vect.end(),id,compare()) - vect.begin()].second+=val;
-    }
-
-    else
-    {
-      pair<long long int, long long int> tmp;
-      tmp.first=id;
-      tmp.second=val;
-
-      vect.push_back(tmp);
+      return;
     }
   }
+
+  pair<long long int, long long int> tmp;
+  tmp.first=id;
+  tmp.second=val;
+
+  vect.push_back(tmp);
+  return;
 }
 
 bool sortsec(const pair<long long int, long long int> &a, const pair<long long int, long long int> &b)
