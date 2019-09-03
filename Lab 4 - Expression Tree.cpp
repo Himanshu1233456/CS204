@@ -1,5 +1,3 @@
-#include <iostream>
-#include <stack>
 #include <bits/stdc++.h>
 
 using namespace std;
@@ -27,10 +25,10 @@ int prior(string p)
 	}
 }
 
-void in_post_conv(string expe[],long long int cnt,string out[])
+void in_post_conv(string expe[],int cnt,string out[])
 {
 
-	long long int i,j,o=0;
+	int i,j,o=0;
 	std::stack<string> s;
 	s.push("N");
 
@@ -126,12 +124,12 @@ tree* node(string s)
 	return tmp;
 }
 
-tree* construct(string post[],long long int cnt)
+tree* construct(string post[],int cnt)
 {
     stack<tree *> tmp;
     tree *t, *t1, *t2;
 
-    for (long long int i=0; i<cnt; i++)
+    for (int i=0; i<cnt; i++)
     {
         if (!op(post[i]))
         {
@@ -158,25 +156,25 @@ tree* construct(string post[],long long int cnt)
     return t;
 }
 
-long long int convert(string s)
+int convert(string s)
 {
-    long long int num = 0;
+    int num = 0;
 
     if(s[0]!='-')
-        for (long long int i=0; i<s.length(); i++)
-            num = num*10 + (long long int(s[i])-48);
+        for (int i=0; i<s.length(); i++)
+            num = num*10 + (int(s[i])-48);
 
     else
-        for (long long int i=1; i<s.length(); i++)
+        for (int i=1; i<s.length(); i++)
         {
-            num = num*10 + (long long int(s[i])-48);
+            num = num*10 + (int(s[i])-48);
             num = num*-1;
         }
 
     return num;
 }
 
-long long int answ(tree* m)
+int answ(tree* m)
 {
     if (!m)
         return 0;
@@ -184,8 +182,8 @@ long long int answ(tree* m)
     else if (!m->l && !m->r)
         return convert(m->a);
 
-    long long int a = answ(m->l);
-    long long int b = answ(m->r);
+    int a = answ(m->l);
+    int b = answ(m->r);
 
     if (m->a=="+")
         return a+b;
@@ -202,25 +200,43 @@ long long int answ(tree* m)
     return a/b;
 }
 
+struct charvalue
+{
+	int v;
+	string c;
+};
+
+bool assign(string expe[],int cnt)
+{
+	for(int i=0;i<cnt;i++)
+	{
+		if(expe[i]=="=")
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 int main()
 {
-	long long int i,j,cnt=0,k,cnt1=0,cnt2=0,l,tc;
+	int i,j,cnt=0,k,cnt1=0,cnt2=0,l,tc;
 	char c,tmp='n',chk;
-	long long int a=0;
+	int a=0;
 	string exp;
-	string expe[50],post[50];
+	string expe[10000],post[10000];
 	tree * ext;
 
 cin>>tc;
 cin>>l;
 
-for(long long int z=0;z<tc;z++)
+for(int z=0;z<tc;z++)
 {
-	for(long long int x=0;x<l;x++)
+	for(int x=0;x<l;x++)
 	{
 		cin>>exp;
 
-		for(i=0;i<50;i++)
+		for(i=0;i<10000;i++)
 		{
 			for(j=cnt;j<exp.length();j++)
 			{
@@ -286,7 +302,7 @@ for(long long int z=0;z<tc;z++)
 			}
 		}
 
-		for(k=0;k<50;k++)
+		for(k=0;k<10000;k++)
 		{
 			if(!expe[k].empty())
 			{
@@ -294,7 +310,7 @@ for(long long int z=0;z<tc;z++)
 			}
 		}
 
-		for(k=0;k<50;k++)
+		for(k=0;k<10000;k++)
 		{
 			if(!expe[k].empty())
 			{
@@ -317,12 +333,23 @@ for(long long int z=0;z<tc;z++)
 		cnt1=0;
 		cnt2=0;
 		exp.clear();
-		for(long long int h=0;h<50;h++)
+		for(int h=0;h<10000;h++)
 		{
 			expe[h].clear();
 			post[h].clear();
 		}
 		free(ext);
+	}
+}
+
+if(assign(expe,cnt1))
+{
+	for(int k=0;k<cnt1;k++)
+	{
+		if(expe[k]=="=")
+		{
+			int idx=k;
+		}
 	}
 }
 
