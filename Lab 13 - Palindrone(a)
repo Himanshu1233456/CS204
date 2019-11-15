@@ -19,7 +19,10 @@ int main()
     {
         string temp = word[i];
         reverse(temp.begin(),temp.end());
-        if(temp == word[i]) continue;
+        if(temp == word[i])
+        {
+            continue;
+        }
         if(binary_search(word,word+n,temp))
         {
             cout<<"Yes"<<endl;
